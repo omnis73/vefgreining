@@ -755,7 +755,7 @@ def build_meta_split():
     en = BASE["en"]; is_ = BASE["is"]
 
     # vefgreining.is: the English pages used to be under /en/
-    rules_is = first + [("/en/*", en + "/:splat"), ("/en", en + "/")] + old
+    rules_is = first + [("/en/news/*", en + "/"), ("/en/news", en + "/"), ("/en/*", en + "/:splat"), ("/en", en + "/")] + old
     # vefgreining.com: English moved from /en/ to the root; every Icelandic address moves to vefgreining.is
     rules_en = first + [("/en/news/*", "/"), ("/en/news", "/"), ("/en/*", "/:splat"), ("/en", "/")]
     for x in is_pages:

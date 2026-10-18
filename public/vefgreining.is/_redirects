@@ -1,5 +1,7 @@
 /2022/05/27/ukraine-war-dashboards/* https://ukraine.vefgreining.com/ 301
 /2022/05/27/ukraine-war-dashboards https://ukraine.vefgreining.com/ 301
+/en/news/* https://www.vefgreining.com/ 301
+/en/news https://www.vefgreining.com/ 301
 /en/* https://www.vefgreining.com/:splat 301
 /en https://www.vefgreining.com/ 301
 /category/* / 301
