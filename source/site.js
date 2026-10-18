@@ -43,7 +43,14 @@
   var root = document.documentElement;
   var themeBtns = document.querySelectorAll("[data-set-theme]");
   /* Same lookup as the head script: storage first, then the tab's window.name (for frames where storage is blocked) */
-  var chosen = get("vg-theme");
+  /* The other language lives on the other domain (vefgreining.is / vefgreining.com), where storage is separate,
+     so the theme travels in the address (?theme=dark) and is removed from it again here. */
+  var qTheme = /[?&]theme=(blue|light|dark)\b/.exec(location.search);
+  var chosen = qTheme ? qTheme[1] : get("vg-theme");
+  if (qTheme) {
+    set("vg-theme", chosen);
+    try { history.replaceState(history.state, "", location.pathname + location.search.replace(/([?&])theme=\w+&?/, "$1").replace(/[?&]$/, "") + location.hash); } catch (e) {}
+  }
   if (!chosen) { var nm = /(?:^|;)vg-theme=(\w+)/.exec(window.name || ""); if (nm) chosen = nm[1]; }
   if (chosen !== "light" && chosen !== "dark") chosen = "blue";
   if (root.getAttribute("data-theme") !== chosen) root.setAttribute("data-theme", chosen);
@@ -73,6 +80,14 @@
     });
   });
   syncThemeButtons();
+
+  /* Links to the other domain carry a non-default theme along */
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest ? e.target.closest("a[href]") : null;
+    if (!a || chosen === "blue" || a.origin === location.origin) return;
+    if (!/(^|\.)vefgreining\.(is|com)$/.test(a.hostname) || a.hostname.indexOf("ukraine.") === 0) return;
+    try { var u = new URL(a.href); u.searchParams.set("theme", chosen); a.href = u.toString(); } catch (err) {}
+  }, true);
 
   /* Pages opened from a link start at the top, even inside frames that keep the scroll position
      between pages (such as the preview). Back/forward still restores where the visitor was, and #anchors still work. */
@@ -163,7 +178,8 @@
     s.src = "https://www.googletagmanager.com/gtag/js?id=" + encodeURIComponent(GA4_ID);
     document.head.appendChild(s);
     gtag("js", new Date());
-    gtag("config", GA4_ID);
+    /* One GA4 property for both domains; the linker keeps a visit together when it crosses between them */
+    gtag("config", GA4_ID, CFG.domains ? { linker: { domains: CFG.domains } } : {});
   }
   function applyConsent(choice) {
     if (choice === "granted") {

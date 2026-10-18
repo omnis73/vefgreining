@@ -1,11 +1,16 @@
 #!/usr/bin/env python3
 """Build the static vefgreining.com site from content/.
 
-Usage:  python3 build.py OUTDIR [--preview]
---preview writes links as .../index.html so the pages work on hosts that
-don't resolve folder URLs. Production output uses clean folder URLs that
-match the old WordPress addresses. The Icelandic site lives at the root,
-the English site under /en/.
+Usage:  python3 build.py OUTDIR [--preview] [--articles]
+
+Production (default): writes two sites, OUTDIR/vefgreining.is/ (Icelandic, served
+at www.vefgreining.is) and OUTDIR/vefgreining.com/ (English, served at
+www.vefgreining.com). Links between the languages are absolute; links inside a
+site are relative. Old addresses redirect to the right domain.
+
+--preview writes one combined site (Icelandic at the root, English under /en/)
+with links ending in index.html, so it can be clicked through from disk or in a
+preview. Internally every page keeps this combined path ("en/..." for English).
 """
 import json, os, re, shutil, sys, html, random, math
 from urllib.parse import quote
@@ -16,7 +21,12 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 CONTENT = os.path.join(HERE, "content")
 OUT = sys.argv[1]
 PREVIEW = "--preview" in sys.argv
-SITE = "https://www.vefgreining.com"
+# Each language has its own domain. SITE is the Icelandic one (feed, combined preview).
+BASE = {"is": "https://www.vefgreining.is", "en": "https://www.vefgreining.com"}
+DOMAIN = {"is": "vefgreining.is", "en": "vefgreining.com"}
+SITE = BASE["is"]
+SPLIT = not PREVIEW
+NEUTRAL = ("assets/", "wp-content/", "favicon")  # files present on both domains
 CFG = json.load(open(os.path.join(CONTENT, "site.json"), encoding="utf-8"))
 if PREVIEW: CFG["config"]["gtmId"] = CFG["config"]["ga4Id"] = ""  # keep preview visits out of real analytics
 EN = CFG["en"]
@@ -44,7 +54,7 @@ UI = {
   "other_services": "Önnur þjónusta", "in_other_lang": "", "dashboard": "Mælaborð",
   "mail_h": "Sendu mér línu", "mail_p": "Segðu mér í stuttu máli frá verkefninu og ég hef samband.",
   "mail_btn": "Senda tölvupóst", "mail_note": "Hnappurinn opnar póstforritið þitt með nýjum pósti til mín. Ef ekkert gerist geturðu sent beint á",
-  "mail_subject": "Fyrirspurn af vefgreining.com",
+  "mail_subject": "Fyrirspurn af vefgreining.is",
  },
  "en": {
   "skip": "Skip to content", "menu": "Menu", "nav_label": "Main menu", "services": "Services", "news": "Articles",
@@ -65,7 +75,7 @@ UI = {
 JS_TEXT = {
  "is": {"invalid": "Fylltu út nafn og gilt netfang.", "mailto": "Póstforritið þitt opnast með skilaboðunum.", "sending": "Sendi…",
         "sent": "Skilaboðin eru send. Ég svara eins fljótt og ég get.",
-        "failed": f"Skilaboðin fóru ekki. Sendu póst á {EMAIL} eða hringdu í 825 8417.", "subject": "Fyrirspurn af vefgreining.com"},
+        "failed": f"Skilaboðin fóru ekki. Sendu póst á {EMAIL} eða hringdu í 825 8417.", "subject": "Fyrirspurn af vefgreining.is"},
  "en": {"invalid": "Enter your name and a valid email address.", "mailto": "Your email program will open with the message.", "sending": "Sending…",
         "sent": "Message sent. I'll reply as soon as I can.",
         "failed": f"The message wasn't sent. Email {EMAIL} or call +354 825 8417.", "subject": "Enquiry from vefgreining.com"},
@@ -80,9 +90,28 @@ def fdate(d, lang):
 
 def esc(s): return html.escape(s, quote=True)
 
+def side(path):
+    """Which language/domain a combined path belongs to."""
+    return "en" if path == "en" or path.startswith("en/") else "is"
+
+def local(path):
+    """Path on its own domain: English pages drop the en/ prefix when the sites are split."""
+    return path[3:] if SPLIT and side(path) == "en" else path
+
+def absurl(path, lang=None):
+    """Full public URL of a combined path (a file under assets/ or wp-content/ on the domain of `lang`)."""
+    s = lang if (lang and path.startswith(NEUTRAL)) else side(path)
+    return BASE[s] + "/" + (path[3:] if s == "en" and side(path) == "en" else path)
+
 def rel(from_dir, to):
-    """Relative link from a page living in from_dir ('' = root) to a site path.
-    `to` is a folder path ending in '/' (a page) or a file path."""
+    """Link from a page living in from_dir ('' = root) to a combined site path.
+    `to` is a folder path ending in '/' (a page) or a file path. Pages in the
+    other language are on the other domain, so they get a full URL."""
+    if SPLIT:
+        if not to.startswith(NEUTRAL) and side(to) != side(from_dir):
+            return absurl(to)
+        if not to.startswith(NEUTRAL): to = local(to)
+        from_dir = local(from_dir)
     depth = len([p for p in from_dir.split("/") if p])
     up = "../" * depth
     if to.endswith("/") or to == "":
@@ -109,13 +138,14 @@ def theme_picker(lang):
 
 def head(page_dir, title, desc, canonical, lang, og_image=None, alt=None):
     css = rel(page_dir, "assets/site.css")
-    og = f'<meta property="og:image" content="{SITE}/{og_image}">' if og_image else ""
+    og = f'<meta property="og:image" content="{absurl(og_image, lang)}">' if og_image else ""
+    canon = BASE[lang] + "/404.html" if canonical == "/404.html" else absurl(canonical.lstrip("/"), lang)
     alts = ""
     if alt:
         other = "en" if lang == "is" else "is"
-        alts = (f'<link rel="alternate" hreflang="{lang}" href="{SITE}{canonical}">\n'
-                f'<link rel="alternate" hreflang="{other}" href="{SITE}/{alt}">\n')
-    cfg = dict(CFG["config"], text=JS_TEXT[lang], lang=lang)
+        alts = (f'<link rel="alternate" hreflang="{lang}" href="{canon}">\n'
+                f'<link rel="alternate" hreflang="{other}" href="{absurl(alt)}">\n')
+    cfg = dict(CFG["config"], text=JS_TEXT[lang], lang=lang, domains=list(DOMAIN.values()))
     rss = f'<link rel="alternate" type="application/rss+xml" title="Vefgreining — fróðleikur" href="{SITE}/feed.xml">' if ARTICLES else ""
     return f"""<!doctype html>
 <html lang="{lang}">
@@ -124,13 +154,13 @@ def head(page_dir, title, desc, canonical, lang, og_image=None, alt=None):
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{esc(title)}</title>
 <meta name="description" content="{esc(desc)}">
-<link rel="canonical" href="{SITE}{canonical}">
+<link rel="canonical" href="{canon}">
 {alts}<meta property="og:type" content="website">
 <meta property="og:site_name" content="Vefgreining">
 <meta property="og:locale" content="{'is_IS' if lang == 'is' else 'en_GB'}">
 <meta property="og:title" content="{esc(title)}">
 <meta property="og:description" content="{esc(desc)}">
-<meta property="og:url" content="{SITE}{canonical}">
+<meta property="og:url" content="{canon}">
 {og}
 <meta name="theme-color" content="#0B3B7A">
 <link rel="icon" href="{rel(page_dir, 'assets/favicon-32.png')}" sizes="32x32" type="image/png">
@@ -141,7 +171,7 @@ def head(page_dir, title, desc, canonical, lang, og_image=None, alt=None):
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400&display=swap">
 <link rel="stylesheet" href="{css}">
-<script>(function(d){{d.classList.add("js");var t=null;try{{t=localStorage.getItem("vg-theme")}}catch(e){{}}if(!t){{var m=/(?:^|;)vg-theme=(\\w+)/.exec(window.name||"");if(m)t=m[1]}}if(t!=="dark"&&t!=="light")t="blue";d.setAttribute("data-theme",t)}})(document.documentElement);window.VG_CONFIG={json.dumps(cfg, ensure_ascii=False)};</script>
+<script>(function(d){{d.classList.add("js");var t=null,q=/[?&]theme=(blue|light|dark)\\b/.exec(location.search);if(q){{t=q[1];try{{localStorage.setItem("vg-theme",t)}}catch(e){{}}}}else{{try{{t=localStorage.getItem("vg-theme")}}catch(e){{}}}}if(!t){{var m=/(?:^|;)vg-theme=(\\w+)/.exec(window.name||"");if(m)t=m[1]}}if(t!=="dark"&&t!=="light")t="blue";d.setAttribute("data-theme",t)}})(document.documentElement);window.VG_CONFIG={json.dumps(cfg, ensure_ascii=False)};</script>
 </head>
 <body>
 <a class="skip" href="#content">{UI[lang]['skip']}</a>
@@ -209,8 +239,12 @@ def page(page_dir, lang, title, desc, canonical, body, current=None, og_image=No
     return head(page_dir, title, desc, canonical, lang, og_image, alt) + header(page_dir, lang, current, alt) + \
         f'<main id="content">\n{body}\n</main>\n' + footer(page_dir, lang)
 
-def write(path, text):
-    full = os.path.join(OUT, path)
+def write(path, text, lang=None):
+    """Write a page by its combined path, or (with lang) a file at the root of that language's site."""
+    if SPLIT:
+        full = os.path.join(OUT, DOMAIN[lang], path) if lang else os.path.join(OUT, DOMAIN[side(path)], local(path))
+    else:
+        full = os.path.join(OUT, path)
     os.makedirs(os.path.dirname(full), exist_ok=True)
     open(full, "w", encoding="utf-8").write(text)
 
@@ -522,7 +556,7 @@ def build_home(lang):
 </section>
 """
     jsonld = {"@context": "https://schema.org", "@type": "ProfessionalService", "name": "Vefgreining",
-              "url": SITE + "/" + d, "email": EMAIL, "telephone": "+354 825 8417",
+              "url": absurl(d), "email": EMAIL, "telephone": "+354 825 8417",
               "founder": {"@type": "Person", "name": "Ragnar Bjartur Guðmundsson"},
               "sameAs": [s["url"] for s in CFG["social"]]}
     other = ROOT["en" if lang == "is" else "is"]
@@ -611,16 +645,20 @@ def build_static_pages():
         write(d + "index.html", html_)
 
 def build_404():
-    d = ""
-    body = """<div class="notfound wrap"><h1>Þessi síða fannst ekki</h1>
+    # The 404 page is served at any depth, so it uses root-absolute links
+    def fix(h): return re.sub(r'(href|src)="(?!https?:|/|#|mailto:|tel:)(\./)?', r'\1="/', h)
+    en_home = BASE["en"] + "/" if SPLIT else "/en/"
+    body = f"""<div class="notfound wrap"><h1>Þessi síða fannst ekki</h1>
 <p>Slóðin gæti hafa breyst þegar vefurinn var endurnýjaður. Prófaðu <a href="/">forsíðuna</a>.</p>
-<p lang="en">This page wasn't found. Try the <a href="/en/">English home page</a>.</p></div>"""
-    # 404 is served at any depth, so use root-absolute links
-    h = page(d, "is", "Síða fannst ekki — Vefgreining", "Síðan fannst ekki.", "/404.html", body)
-    h = re.sub(r'(href|src)="(?!https?:|/|#|mailto:|tel:)(\./)?', r'\1="/', h)
-    write("404.html", h)
+<p lang="en">This page wasn't found. Try the <a href="{en_home}">English home page</a>.</p></div>"""
+    write("404.html", fix(page("", "is", "Síða fannst ekki — Vefgreining", "Síðan fannst ekki.", "/404.html", body)), "is" if SPLIT else None)
+    if SPLIT:
+        body = f"""<div class="notfound wrap"><h1>Page not found</h1>
+<p>The address may have changed when the site was rebuilt. Try the <a href="/">home page</a>, or the <a href="https://ukraine.vefgreining.com/" data-track="dashboard_click">Ukraine war dashboard</a>.</p>
+<p lang="is">Síðan fannst ekki. Íslenski vefurinn er á <a href="{BASE['is']}/">vefgreining.is</a>.</p></div>"""
+        write("404.html", fix(page("en/", "en", "Page not found — Vefgreining", "Page not found.", "/404.html", body)), "en")
 
-def build_meta():
+def build_meta_combined():
     urls = ["/", "/en/"] + ["/" + sp["path"] for sp, _ in all_pages()]
     if ARTICLES: urls += ["/news/", "/en/news/"] + ["/" + p["path"] for p in POSTS]
     sm = "".join(f"<url><loc>{SITE}{u}</loc></url>" for u in urls)
@@ -670,7 +708,72 @@ def build_meta():
     write(".htaccess", "\n".join(ht) + "\n")
 
 
+HEADERS = """/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: SAMEORIGIN
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+
+/assets/*
+  Cache-Control: public, max-age=86400
+
+/wp-content/*
+  Cache-Control: public, max-age=2592000
+"""
+
+def build_meta_split():
+    """Sitemaps, robots, headers and redirects for the two domains."""
+    is_pages = [sp["path"] for sp, l in all_pages() if side(sp["path"]) == "is"]
+    en_pages = [local(sp["path"]) for sp, l in all_pages() if side(sp["path"]) == "en"]
+    clash = set(is_pages) & set(en_pages)
+    assert not clash, f"Same address on both domains: {clash}"
+    for lang, pages in (("is", is_pages), ("en", en_pages)):
+        urls = [BASE[lang] + "/"] + [BASE[lang] + "/" + x for x in pages]
+        if ARTICLES and lang == "is": urls += [SITE + "/news/"] + [SITE + "/" + p["path"] for p in POSTS]
+        write("sitemap.xml", '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+              + "".join(f"<url><loc>{u}</loc></url>" for u in urls) + "</urlset>\n", lang)
+        write("robots.txt", f"User-agent: *\nAllow: /\nSitemap: {BASE[lang]}/sitemap.xml\n", lang)
+        write("_headers", HEADERS, lang)
+    if ARTICLES:
+        items = "".join(f"<item><title>{esc(p['title'])}</title><link>{SITE}/{p['path']}</link><guid>{SITE}/{p['path']}</guid>"
+                        f"<pubDate>{date.fromisoformat(p['date']).strftime('%a, %d %b %Y')} 12:00:00 +0000</pubDate><description>{esc(p['excerpt'])}</description></item>" for p in POSTS)
+        write("feed.xml", f'<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0"><channel><title>Vefgreining</title><link>{SITE}/</link><description>Fróðleikur og tilkynningar</description><language>is</language>{items}</channel></rss>\n', "is")
+
+    # Old WordPress addresses. These were all on the Icelandic site, so on vefgreining.com they go to vefgreining.is.
+    news = "/news/" if ARTICLES else "/"
+    feed = "/feed.xml" if ARTICLES else "/"
+    old = [("/category/*", news), ("/feed/*", feed), ("/feed", feed), ("/news/page/*", news),
+           ("/wp-admin/*", "/"), ("/wp-login.php", "/"), ("/greinar/*", news), ("/blog/*", news)] + \
+          [(f"/{x}/*", "/") for x in ("sample-page","home","contact-us","our-history","our-achievements","our-vision","service-title-2","service-title-3","service-title-4","shop","cart","checkout","my-account")]
+    ua_dash = "https://ukraine.vefgreining.com/"
+    first = []
+    if not ARTICLES:
+        # Old article addresses: the dashboard article goes to the dashboard, the rest to the home page
+        ua = next(p["path"] for p in POSTS if "ukraine" in p["path"])
+        first = [(f"/{ua}*", ua_dash), (f"/{ua.rstrip('/')}", ua_dash)]
+        old += [("/news/*", "/"), ("/news", "/")] + [(f"/{y}/*", "/") for y in sorted({p["path"][:4] for p in POSTS})]
+    en = BASE["en"]; is_ = BASE["is"]
+
+    # vefgreining.is: the English pages used to be under /en/
+    rules_is = first + [("/en/*", en + "/:splat"), ("/en", en + "/")] + old
+    # vefgreining.com: English moved from /en/ to the root; every Icelandic address moves to vefgreining.is
+    rules_en = first + [("/en/news/*", "/"), ("/en/news", "/"), ("/en/*", "/:splat"), ("/en", "/")]
+    for x in is_pages:
+        rules_en += [(f"/{x}*", f"{is_}/{x}:splat"), (f"/{x.rstrip('/')}", f"{is_}/{x}")]
+    if ARTICLES:
+        rules_en += [("/news/*", is_ + "/news/:splat"), ("/news", is_ + "/news/")] + \
+                    [(f"/{y}/*", f"{is_}/{y}/:splat") for y in sorted({p["path"][:4] for p in POSTS})]
+    rules_en += [(a, is_ + b if b.startswith("/") else b) for a, b in old]
+    for lang, rules in (("is", rules_is), ("en", rules_en)):
+        write("_redirects", "".join(f"{a} {b} 301\n" for a, b in rules), lang)
+
 def copy_assets():
+    if SPLIT:
+        for lang in ("is", "en"): copy_assets_to(os.path.join(OUT, DOMAIN[lang]))
+    else:
+        copy_assets_to(OUT)
+
+def copy_assets_to(OUT):
     shutil.copytree(os.path.join(HERE, "media", "wp-content"), os.path.join(OUT, "wp-content"), dirs_exist_ok=True)
     os.makedirs(os.path.join(OUT, "assets"), exist_ok=True)
     for f in ("site.css", "site.js"): shutil.copy(os.path.join(HERE, f), os.path.join(OUT, "assets", f))
@@ -686,5 +789,6 @@ if __name__ == "__main__":
         build_home(lang)
         if ARTICLES: build_news(lang)
     if ARTICLES: build_posts()
-    build_static_pages(); build_404(); build_meta()
-    print("built", OUT, "preview" if PREVIEW else "production")
+    build_static_pages(); build_404()
+    build_meta_split() if SPLIT else build_meta_combined()
+    print("built", OUT, "preview (combined)" if PREVIEW else "production: " + " + ".join(DOMAIN.values()))
