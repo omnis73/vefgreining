@@ -34,13 +34,19 @@ To bring them back, set `"articles": true` in `config` in `content/site.json` an
 
 The English site is under `/en/`. Each page has an `alt` field pointing to its counterpart in the other language, which the language switch in the header uses.
 
-## Hosting (pick one)
+## How it is hosted
 
-**Cloudflare Pages or Netlify (recommended, free).** Drag the `site/` folder into a new project, then point vefgreining.com and www.vefgreining.com at it in the DNS settings. The `_redirects` file is picked up automatically and sends old WordPress addresses (categories, feed, demo pages) to the right place.
+- **Cloudflare Pages**, project `vefgreining` in the ragnarbjartur@gmail.com Cloudflare account, connected to the GitHub repository `omnis73/vefgreining` (branch `main`). It serves the `site/` folder as is; there is no build step on Cloudflare.
+- **Updating the site:** rebuild `site/` with `build.py`, commit and push to `main`. Cloudflare publishes the new version within a minute. Each deployment also gets its own preview address under vefgreining.pages.dev.
+- **Addresses:** www.vefgreining.com is the main address. A Cloudflare redirect rule sends vefgreining.com to www, keeping the path and query string.
+- **DNS** for vefgreining.com is managed in Cloudflare (nameservers melnicoff.ns.cloudflare.com and vida.ns.cloudflare.com, set at Bluehost, which is still the registrar).
+- **Email** for vefgreining.com still runs on Bluehost. The mail records (MX, mail, imap, pop, smtp, autodiscover, SPF, DKIM) are "DNS only" in Cloudflare and must stay that way; the Cloudflare proxy only handles web traffic.
+- **ukraine.vefgreining.com** is a "DNS only" CNAME to omnis73.github.io (GitHub Pages).
+- **Going back to WordPress** would mean restoring ns1/ns2.bluehost.com at Bluehost. The WordPress site is still there, untouched.
 
-**Your current host (Apache/cPanel).** Delete the WordPress files and upload the contents of `site/`. The `.htaccess` file handles the 404 page and the old-address redirects.
+The `_redirects` and `_headers` files in `site/` are read by Cloudflare Pages: old WordPress addresses redirect to their new places, and pages get basic security and caching headers. `.htaccess` is only for an Apache host and is ignored on Cloudflare.
 
-All article and page addresses are the same as on the WordPress site, so links from Google, social media and other sites keep working.
+All page addresses are the same as on the WordPress site, so links from Google, social media and other sites keep working.
 
 ## Settings to check in `content/site.json`
 
