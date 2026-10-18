@@ -1,0 +1,443 @@
+{
+ "config": {
+  "gtmId": "GTM-584FJFB",
+  "formEndpoint": "",
+  "email": "vefgreining@vefgreining.is",
+  "ga4Id": "G-ETDRLBN0KH",
+  "articles": false
+ },
+ "process": [
+  "Markmið skilgreind",
+  "Mælingar settar upp",
+  "Mælaborð í notkun",
+  "Ákvarðanir byggðar á gögnum"
+ ],
+ "services": [
+  {
+   "title": "Mat á árangri af vefstarfi",
+   "text": "Greiningarvinna, uppsetning markvissra mælinga og mælaborð fyrir stjórnendur.",
+   "more": "vefmaelingar/"
+  },
+  {
+   "title": "Viðskiptamanna- og starfsmannakannanir",
+   "text": "Hönnun, framkvæmd og úrvinnsla kannana á viðhorfum starfsmanna eða viðskiptavina.",
+   "more": "kannanir/"
+  },
+  {
+   "title": "Greining og kynningar",
+   "text": "Viðamikil reynsla í framsetningu talnalegra upplýsinga þar sem mikið er í húfi og verk þurfa að vinnast hratt.",
+   "more": "fjarfestakynningar/"
+  },
+  {
+   "title": "Ráðgjöf og vefumsjón",
+   "text": "Ráðgjöf í vefmálum, umsjón með samfélagsmiðlum, Google Ads herferðum og póstlistum.",
+   "more": "radgjof-og-vefumsjon/"
+  }
+ ],
+ "clients": [
+  {
+   "name": "Marel",
+   "url": "https://marel.com"
+  },
+  {
+   "name": "Kringlan",
+   "url": "https://www.kringlan.is"
+  },
+  {
+   "name": "RÚV",
+   "url": "https://www.ruv.is"
+  },
+  {
+   "name": "Blue Lagoon",
+   "url": "https://www.bluelagoon.com"
+  },
+  {
+   "name": "Bioeffect",
+   "url": "https://www.bioeffect.com"
+  },
+  {
+   "name": "Hafnarfjarðarbær",
+   "url": "https://hafnarfjordur.is"
+  },
+  {
+   "name": "Dómstólasýslan",
+   "url": "https://island.is/s/domstolasyslan"
+  },
+  {
+   "name": "Kerecis",
+   "url": "https://www.kerecis.com"
+  },
+  {
+   "name": "Hæstiréttur",
+   "url": "https://island.is/s/haestirettur"
+  },
+  {
+   "name": "Landsréttur",
+   "url": "https://island.is/s/landsrettur"
+  },
+  {
+   "name": "Héraðsdómstólar",
+   "url": "https://island.is/s/heradsdomstolar"
+  },
+  {
+   "name": "Capacent",
+   "url": "https://capacent.is"
+  },
+  {
+   "name": "Húsgagnahöllin",
+   "url": "https://husgagnahollin.is"
+  },
+  {
+   "name": "Betra bak",
+   "url": "https://betrabak.is"
+  },
+  {
+   "name": "Dorma",
+   "url": "https://dorma.is"
+  },
+  {
+   "name": "Iðan fræðslusetur",
+   "url": "https://www.idan.is"
+  }
+ ],
+ "figures": [
+  {
+   "label": "Vefir sem ég hef komið að",
+   "value": "72"
+  },
+  {
+   "label": "Vefir í virkri vefmælingu",
+   "value": "38"
+  },
+  {
+   "label": "Vaktaðar heimsóknir á mánuði á mælda vefi",
+   "value": "7.140.000"
+  },
+  {
+   "label": "Viðskiptavina- og starfsmannakannanir",
+   "value": "600+"
+  },
+  {
+   "label": "Uppsett stjórnborð (Looker Studio, Power BI)",
+   "value": "160+"
+  },
+  {
+   "label": "Notendur stjórnborðs um stríðið í Úkraínu",
+   "value": "21.100+"
+  }
+ ],
+ "case": {
+  "title": "Árið 2025 á vef Hafnarfjarðarbæjar",
+  "path": "arid-2020-a-vefnum/",
+  "image": "wp-content/uploads/2021/04/HafnarfjordurFallegur.jpeg",
+  "summary": "Verkefni unnið fyrir Hafnarfjarðarbæ, sem er í fararbroddi íslenskra sveitarfélaga þegar kemur að upplýsingagjöf til íbúa."
+ },
+ "pages": [
+  {
+   "path": "arid-2020-a-vefnum/",
+   "file": "hafnarfjordur.html",
+   "title": "Árið 2025 á vef Hafnarfjarðarbæjar",
+   "description": "Opið stjórnborð um notkun á vef Hafnarfjarðarbæjar, unnið af Vefgreiningu.",
+   "image": "wp-content/uploads/2021/04/HafnarfjordurFallegur.jpeg",
+   "wide": true,
+   "alt": "en/hafnarfjordur-dashboard/"
+  },
+  {
+   "path": "lagalegur-fyrirvari/",
+   "file": "lagalegur.html",
+   "title": "Lagalegur fyrirvari",
+   "description": "Skilmálar, höfundarréttur, vefkökur og persónuvernd á vefgreining.com.",
+   "alt": "en/legal/"
+  },
+  {
+   "path": "covid-19-nordurlond-i-samanburdi/",
+   "file": "covid-nordurlond.html",
+   "title": "COVID-19: samanburður á Norðurlöndum",
+   "description": "Stjórnborð um COVID-19 á Norðurlöndum. Þeim er ekki lengur viðhaldið.",
+   "alt": "covid-english/"
+  },
+  {
+   "path": "vefmaelingar/",
+   "file": "vefmaelingar.html",
+   "title": "Markvissar vefmælingar",
+   "description": "Forgreining, skýrslur og stjórnborð og viðbótarþjónusta í vefmálum.",
+   "service": 0,
+   "alt": "en/web-analytics/"
+  },
+  {
+   "path": "fjarfestakynningar/",
+   "file": "kynningar.html",
+   "title": "Faglegar kynningar",
+   "description": "Fjárfestakynningar og kynningar á niðurstöðum fyrir stjórnendur.",
+   "service": 2,
+   "alt": "en/presentations/"
+  },
+  {
+   "path": "ferill/",
+   "file": "ferill.html",
+   "title": "Ragnar Bjartur Guðmundsson",
+   "description": "Ferilskrá Ragnars Bjarts Guðmundssonar.",
+   "alt": "en/cv/"
+  },
+  {
+   "path": "covid-english/",
+   "file": "covid-english.html",
+   "title": "COVID-19: Nordic countries in comparison",
+   "description": "COVID-19 dashboards for the Nordic countries. No longer updated.",
+   "lang": "en",
+   "alt": "covid-19-nordurlond-i-samanburdi/"
+  },
+  {
+   "path": "kannanir/",
+   "file": "kannanir.html",
+   "title": "Viðskiptamanna- og starfsmannakannanir",
+   "description": "Hönnun, framkvæmd og úrvinnsla kannana á viðhorfum viðskiptavina og starfsmanna.",
+   "service": 1,
+   "alt": "en/surveys/"
+  },
+  {
+   "path": "radgjof-og-vefumsjon/",
+   "file": "radgjof.html",
+   "title": "Ráðgjöf og vefumsjón",
+   "description": "Ráðgjöf í vefmálum, umsjón með samfélagsmiðlum, Google Ads herferðum og póstlistum.",
+   "service": 3,
+   "alt": "en/consulting/"
+  }
+ ],
+ "social": [
+  {
+   "name": "Bluesky",
+   "url": "https://bsky.app/profile/ragnarbjartur.bsky.social"
+  },
+  {
+   "name": "LinkedIn",
+   "url": "https://is.linkedin.com/in/ragnarbjartur"
+  },
+  {
+   "name": "Mastodon",
+   "url": "https://masto.ai/@ragnarbjartur"
+  },
+  {
+   "name": "Facebook",
+   "url": "https://www.facebook.com/vefgreining"
+  },
+  {
+   "name": "X (Twitter)",
+   "url": "https://twitter.com/ragnarbjartur"
+  }
+ ],
+ "hero": {
+  "title": "Fáðu meira út úr því sem þú gerir",
+  "lede": "Vefmælingar, vefráðgjöf, faglegar kynningar og uppsetning kannana. Svo vefurinn styðji við viðskiptamarkmiðin og allir miðlar séu nýttir með markvissum hætti.",
+  "see_services": "Sjá þjónustuna",
+  "before": "Áður",
+  "now": "Nú",
+  "chart_label": "Skýringarmynd: lína sem er flöt í byrjun en rís eftir að markmið eru skilgreind, mælingar settar upp og mælaborð tekið í notkun",
+  "caption": "Skýringarmynd: dæmigerð þróun þegar markmið, mælingar og ákvarðanir haldast í hendur."
+ },
+ "home": {
+  "title": "Vefgreining — vefmælingar, kannanir og mælaborð",
+  "description": "Ragnar Bjartur Guðmundsson: vefmælingar, viðskiptamanna- og starfsmannakannanir, mælaborð og ráðgjöf í vefmálum. Láttu vefinn styðja við viðskiptamarkmiðin.",
+  "clients_h": "Fyrirtæki og stofnanir sem ég hef unnið fyrir",
+  "clients_note": "Auk þess hef ég haldið fyrirlestra um vefmælingar hjá fyrirtækjum og háskólum.",
+  "services_h": "Þetta er sérþekking mín",
+  "work_h": "Sýnishorn",
+  "work_p": "Flest verk mín eru unnin fyrir fyrirtæki í samkeppnisrekstri og eru því bundin trúnaði. Hér er dæmi um stjórnborð sem er gert fyrir almenning.",
+  "view_dashboard": "Skoða stjórnborðið",
+  "figures_h": "Tölur úr starfseminni",
+  "news_h": "Fróðleikur",
+  "news_p": "Greinar, viðtöl og mælaborð.",
+  "news_title": "Fróðleikur og tilkynningar",
+  "news_description": "Greinar, viðtöl og mælaborð frá Vefgreiningu.",
+  "contact_h": "Ertu að fá nóg út úr vefnum?",
+  "contact_p": "Segðu mér frá verkefninu. Ég svara yfirleitt samdægurs.",
+  "role": "MBA, ráðgjafi í vefgreiningu",
+  "about": "Ég hjálpa fyrirtækjum og stofnunum að mæla það sem skiptir máli, greina gögnin og setja niðurstöðurnar fram svo stjórnendur geti tekið ákvarðanir.",
+  "cv": "Ferilskrá"
+ },
+ "en": {
+  "hero": {
+   "title": "Get more out of what you do",
+   "lede": "Web analytics, web consulting, professional presentations and surveys. So your website supports your business goals and every channel is used to full effect.",
+   "see_services": "See services",
+   "before": "Before",
+   "now": "Now",
+   "chart_label": "Illustration: a line that is flat at first and rises once goals are defined, measurement is set up and a dashboard is in use",
+   "caption": "Illustration: a typical trend when goals, measurement and decisions go hand in hand."
+  },
+  "process": [
+   "Goals defined",
+   "Measurement set up",
+   "Dashboard in use",
+   "Decisions based on data"
+  ],
+  "services": [
+   {
+    "title": "Measuring web performance",
+    "text": "Analysis, focused measurement set-up and dashboards for management.",
+    "more": "en/web-analytics/"
+   },
+   {
+    "title": "Customer and employee surveys",
+    "text": "Design, execution and analysis of surveys on employee or customer attitudes.",
+    "more": "en/surveys/"
+   },
+   {
+    "title": "Analysis and presentations",
+    "text": "Extensive experience presenting numerical information where the stakes are high and work must be done fast.",
+    "more": "en/presentations/"
+   },
+   {
+    "title": "Consulting and web management",
+    "text": "Web consulting and management of social media, Google Ads campaigns and mailing lists.",
+    "more": "en/consulting/"
+   }
+  ],
+  "client_names": {
+   "Hafnarfjarðarbær": "Town of Hafnarfjörður",
+   "Dómstólasýslan": "Icelandic Court Administration",
+   "Hæstiréttur": "Supreme Court of Iceland",
+   "Landsréttur": "Court of Appeal",
+   "Héraðsdómstólar": "District Courts",
+   "Iðan fræðslusetur": "IÐAN Education Centre"
+  },
+  "figures": [
+   {
+    "label": "Websites I have worked on",
+    "value": "72"
+   },
+   {
+    "label": "Websites under active measurement",
+    "value": "38"
+   },
+   {
+    "label": "Monitored visits per month across measured websites",
+    "value": "7,140,000"
+   },
+   {
+    "label": "Customer and employee surveys",
+    "value": "600+"
+   },
+   {
+    "label": "Dashboards built (Looker Studio, Power BI)",
+    "value": "160+"
+   },
+   {
+    "label": "Users of the Ukraine war dashboard",
+    "value": "21,100+"
+   }
+  ],
+  "case": {
+   "title": "2025 on the Hafnarfjörður website",
+   "path": "en/hafnarfjordur-dashboard/",
+   "image": "wp-content/uploads/2021/04/HafnarfjordurFallegur.jpeg",
+   "summary": "A project for the Town of Hafnarfjörður, which leads Icelandic municipalities in sharing information with residents."
+  },
+  "home": {
+   "title": "Vefgreining — web analytics, surveys and dashboards",
+   "description": "Ragnar Bjartur Guðmundsson: web analytics, customer and employee surveys, dashboards and web consulting in Iceland. Make your website support your business goals.",
+   "clients_h": "Companies and institutions I have worked for",
+   "clients_note": "I have also given talks on web analytics at companies and universities.",
+   "services_h": "My areas of expertise",
+   "work_h": "Sample work",
+   "work_p": "Most of my work is for companies in competitive markets and is therefore confidential. Here is an example of a dashboard made for the public.",
+   "view_dashboard": "View the dashboard",
+   "figures_h": "Key figures",
+   "news_h": "Articles",
+   "news_p": "Articles, interviews and dashboards. Most are in Icelandic.",
+   "news_title": "Articles",
+   "news_description": "Articles, interviews and dashboards from Vefgreining.",
+   "news_intro": "Most articles are in Icelandic. English titles and summaries are below, and each link opens the original article.",
+   "contact_h": "Are you getting enough out of your website?",
+   "contact_p": "Tell me about your project. I usually reply the same day.",
+   "role": "MBA, web analytics consultant",
+   "about": "I help companies and institutions measure what matters, analyse the data and present the results so managers can make decisions.",
+   "cv": "CV"
+  },
+  "pages": [
+   {
+    "path": "en/hafnarfjordur-dashboard/",
+    "file": "en/hafnarfjordur.html",
+    "title": "2025 on the Hafnarfjörður website",
+    "description": "A public dashboard on use of the Town of Hafnarfjörður website, made by Vefgreining.",
+    "image": "wp-content/uploads/2021/04/HafnarfjordurFallegur.jpeg",
+    "wide": true,
+    "alt": "arid-2020-a-vefnum/"
+   },
+   {
+    "path": "en/legal/",
+    "file": "en/legal.html",
+    "title": "Legal notice",
+    "description": "Terms, copyright, cookies and privacy on vefgreining.com.",
+    "alt": "lagalegur-fyrirvari/"
+   },
+   {
+    "path": "en/web-analytics/",
+    "file": "en/web-analytics.html",
+    "title": "Measuring web performance",
+    "description": "Preliminary analysis, reports and dashboards, and additional web services.",
+    "service": 0,
+    "alt": "vefmaelingar/"
+   },
+   {
+    "path": "en/surveys/",
+    "file": "en/surveys.html",
+    "title": "Customer and employee surveys",
+    "description": "Design, execution and analysis of customer and employee attitude surveys.",
+    "service": 1,
+    "alt": "kannanir/"
+   },
+   {
+    "path": "en/presentations/",
+    "file": "en/presentations.html",
+    "title": "Analysis and presentations",
+    "description": "Investor presentations and presentations of results for management.",
+    "service": 2,
+    "alt": "fjarfestakynningar/"
+   },
+   {
+    "path": "en/consulting/",
+    "file": "en/consulting.html",
+    "title": "Consulting and web management",
+    "description": "Web consulting and management of social media, Google Ads campaigns and mailing lists.",
+    "service": 3,
+    "alt": "radgjof-og-vefumsjon/"
+   },
+   {
+    "path": "en/cv/",
+    "file": "en/cv.html",
+    "title": "Ragnar Bjartur Guðmundsson",
+    "description": "CV of Ragnar Bjartur Guðmundsson.",
+    "alt": "ferill/"
+   }
+  ],
+  "ukraine": {
+   "url": "https://ukraine.vefgreining.com",
+   "status": "Updated at least twice a day",
+   "title": "Russia's war against Ukraine in daily data",
+   "lede": "A free public dashboard following the war day by day. It brings together the Ukrainian General Staff's morning and evening reports with independent sources such as Oryx, ISW and DeepStateMap, and shows clearly which figures come from where.",
+   "topics": [
+    "Russian losses",
+    "Combat engagements",
+    "Drone and missile attacks",
+    "Key targets hit",
+    "Occupied territory",
+    "Civilian casualties"
+   ],
+   "open": "Open the dashboard",
+   "follow": "Follow updates on Bluesky",
+   "languages": "Available in English, Ukrainian and Russian, with light and dark modes.",
+   "users": "Used by more than 21,100 people.",
+   "map_alt": "Map of Ukraine in blue and yellow"
+  },
+  "about": {
+   "page_title": "Russia's war against Ukraine: daily data dashboard — Ragnar Bjartur Guðmundsson",
+   "page_description": "Daily data on Russia's war against Ukraine: Russian losses, combat engagements, drone and missile attacks, key targets hit, maps and civilian casualties.",
+   "title": "Who makes the dashboard",
+   "lede": "I'm Ragnar Bjartur Guðmundsson, a data analyst in Iceland. My day job involves making sense of data. In my spare time, I apply these skills to Ukraine's fight for freedom.",
+   "work": "By day I run Vefgreining, a small consultancy helping companies and institutions in Iceland with:",
+   "contact_h": "Get in touch",
+   "contact_p": "Questions about the dashboard, corrections and press enquiries are welcome."
+  }
+ }
+}

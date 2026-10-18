@@ -1,0 +1,10 @@
+ErrorDocument 404 /404.html
+RewriteEngine On
+RewriteCond %{HTTP_HOST} ^vefgreining\.com$ [NC]
+RewriteRule ^(.*)$ https://www.vefgreining.com/$1 [R=301,L]
+RewriteRule ^category/ /news/ [R=301,L]
+RewriteRule ^feed/?$ /feed.xml [R=301,L]
+RewriteRule ^news/page/ /news/ [R=301,L]
+RewriteRule ^(wp-admin|wp-login\.php) / [R=301,L]
+RewriteRule ^(greinar|blog)/?$ /news/ [R=301,L]
+RewriteRule ^(sample-page|home|contact-us|our-history|our-achievements|our-vision|service-title-[234]|shop|cart|checkout|my-account)/?$ / [R=301,L]
