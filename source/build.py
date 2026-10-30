@@ -683,8 +683,8 @@ def build_meta_combined():
     # Redirects for old WordPress addresses (Netlify / Cloudflare Pages format, plus Apache .htaccess)
     news = "/news/" if ARTICLES else "/"
     rules = [("/category/*", news), ("/feed/*", "/feed.xml" if ARTICLES else "/"), ("/feed", "/feed.xml" if ARTICLES else "/"), ("/news/page/*", news),
-             ("/wp-admin/*", "/"), ("/wp-login.php", "/"), ("/greinar/*", news), ("/blog/*", news)] + \
-            [(f"/{x}/*", "/") for x in ("sample-page","home","contact-us","our-history","our-achievements","our-vision","service-title-2","service-title-3","service-title-4","shop","cart","checkout","my-account")]
+             ("/greinar/*", news), ("/blog/*", news)]
+    # WordPress login/admin and theme demo addresses are not redirected: they return 404 so scanners see them as gone
     if not ARTICLES:
         # Old article addresses: the dashboard article goes to the dashboard, the rest to the home page
         ua = next(p["path"] for p in POSTS if "ukraine" in p["path"])
@@ -702,9 +702,8 @@ def build_meta_combined():
                "RewriteRule ^en/news(/.*)?$ /en/ [R=301,L]", "RewriteRule ^news(/.*)?$ / [R=301,L]",
                f"RewriteRule ^({years})/ / [R=301,L]"]
     ht += [f"RewriteRule ^category/ {n} [R=301,L]", f"RewriteRule ^feed/?$ {'/feed.xml' if ARTICLES else '/'} [R=301,L]",
-           f"RewriteRule ^news/page/ {n} [R=301,L]", "RewriteRule ^(wp-admin|wp-login\\.php) / [R=301,L]",
-           f"RewriteRule ^(greinar|blog)/?$ {n} [R=301,L]",
-           "RewriteRule ^(sample-page|home|contact-us|our-history|our-achievements|our-vision|service-title-[234]|shop|cart|checkout|my-account)/?$ / [R=301,L]"]
+           f"RewriteRule ^news/page/ {n} [R=301,L]",
+           f"RewriteRule ^(greinar|blog)/?$ {n} [R=301,L]"]
     write(".htaccess", "\n".join(ht) + "\n")
 
 
@@ -743,8 +742,8 @@ def build_meta_split():
     news = "/news/" if ARTICLES else "/"
     feed = "/feed.xml" if ARTICLES else "/"
     old = [("/category/*", news), ("/feed/*", feed), ("/feed", feed), ("/news/page/*", news),
-           ("/wp-admin/*", "/"), ("/wp-login.php", "/"), ("/greinar/*", news), ("/blog/*", news)] + \
-          [(f"/{x}/*", "/") for x in ("sample-page","home","contact-us","our-history","our-achievements","our-vision","service-title-2","service-title-3","service-title-4","shop","cart","checkout","my-account")]
+           ("/greinar/*", news), ("/blog/*", news)]
+    # WordPress login/admin and theme demo addresses are not redirected: they return 404 so scanners see them as gone
     ua_dash = "https://ukraine.vefgreining.com/"
     first = []
     if not ARTICLES:
